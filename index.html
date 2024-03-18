@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="https://cdnjs.com/libraries/bodymovin" type="text/javascript"></script> -->
+    <!-- <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"
+        integrity="sha512-jEnuDt6jfecCjthQAJ+ed0MTVA++5ZKmlUcmDGBv2vUI/REn6FuIdixLNnQT+vKusE2hhTk2is3cFvv5wA+Sgg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="lottie.js"></script> -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <style>
+        body {
+            display: grid;
+            height: 100vh;
+            place-items: center;
+        }
+
+        .box {
+            /* 12px; */
+            background: linear-gradient(180deg, rgba(22, 22, 23, 1) 8.14%, rgba(22, 22, 23, 0.7) 67.03%, rgba(22, 22, 23, 0.27) 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(4px);
+        }
+
+        .contianer {
+            width: 100%;
+
+        }
+
+        .animationGroup {
+            display: flex;
+            /* width: 48px; */
+            padding: 20px;
+            justify-content: center;
+            gap: 1rem;
+            align-items: center;
+
+            div {
+                width: 5rem;
+                height: 5.3438rem;
+            }
+
+            #guaduan {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 5rem;
+
+                img {
+                    width: 3.2887rem;
+                    height: 3.2887rem;
+                }
+            }
+
+        }
+    </style>
+
+</head>
+
+<body style="background-color: black;">
+    <div class="contianer">
+        <h1 style="font-size:xx-large ;text-align: center;color: white;letter-spacing: 0.2em;background: var(--white-grad,
+            linear-gradient(180deg, #FFF 21.43%, rgba(255, 255, 255, 0.00) 80.7%)); background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;">通话响铃动效</h1>
+
+        <div id="ringtone" style=" text-align:center ;max-width: 700px;color: white;margin: 0 auto;" class=""></div>
+        <div class="  animationGroup box">
+            <div id="shexiangji-container" class="size-48" data-animation="shexiangji"></div>
+            <div id="flip-container" class="size-48" data-animation="flip"> </div>
+            <div id="picture-container" class="size-48" data-animation="picture"> </div>
+            <div id="guaduan" class=""><img src="./assets/guaduan.svg" style=""></div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const animationObjects = {
+            'ringtone': {
+                animation: lottie.loadAnimation({
+                    container: document.getElementById('ringtone'),
+                    renderer: 'svg',
+                    loop: false,
+                    autoplay: false,
+                    path: './assets/ringtone.json'
+                }),
+                isPlayingForward: true // 初始状态：正向播放  
+            },
+            'flip': {
+                animation: lottie.loadAnimation({
+                    container: document.getElementById('flip-container'),
+                    renderer: 'svg',
+                    loop: false,
+                    autoplay: false,
+                    path: './assets/flip.json'
+                }),
+                isPlayingForward: true // 初始状态：正向播放  
+            },
+            'picture': {
+                animation: lottie.loadAnimation({
+                    container: document.getElementById('picture-container'),
+                    renderer: 'svg',
+                    loop: false,
+                    autoplay: false,
+                    path: './assets/picture.json'
+                }),
+                isPlayingForward: true
+            },
+            'shexiangji': {
+                animation: lottie.loadAnimation({
+                    container: document.getElementById('shexiangji-container'),
+                    renderer: 'svg',
+                    loop: false,
+                    autoplay: false,
+                    path: './assets/shexiangji.json'
+                }),
+                isPlayingForward: true
+            },
+            // 其他动画...  
+        };
+
+        // 播放动画的方法，根据 isPlayingForward 的值决定播放方向  
+        function playAnimation(animationName, direction = 'forward', loop = true) {
+            const animation = animationObjects[animationName].animation;
+
+            if (direction === 'forward') {
+                animation.play();
+                animation.loop = true;
+                animationObjects[animationName].isPlayingForward = true;
+            } else if (direction === 'reverse') {
+                // animation.loop(loop);
+                animation.loop = true;
+                animation.setDirection(-1); // 设置动画反向播放  
+                animation.play();
+                animationObjects[animationName].isPlayingForward = false;
+            }
+        }
+
+        // 停止动画的方法  
+        function stopAnimation(animationName) {
+            const animation = animationObjects[animationName].animation;
+            animation.stop();
+        }
+
+        // 切换动画播放方向的方法  
+        function toggleAnimationDirection(animationName) {
+            const animation = animationObjects[animationName].animation;
+            if (animationObjects[animationName].isPlayingForward) {
+                // 如果当前是正向播放，则切换到反向播放  
+                animation.setDirection(-1);
+                animation.play();
+            } else {
+                // 如果当前是反向播放，则切换到正向播放  
+                animation.setDirection(1);
+                animation.play();
+            }
+            // 切换播放状态  
+            animationObjects[animationName].isPlayingForward = !animationObjects[animationName].isPlayingForward;
+        }
+        const elements = document.querySelectorAll('.animationGroup div');
+        console.log(elements);
+        // 为每个元素添加点击事件监听器  
+
+        // 示例：播放 'flip' 动画  
+        //点击切换方向
+        playAnimation('ringtone')
+
+        elements.forEach(element => {
+            console.log(element);
+            element.addEventListener('click', (e) => {
+                console.log(e.currentTarget);
+                if (e.currentTarget) {
+                    const animationName = element.getAttribute('data-animation');
+                    toggleAnimationDirection(animationName);
+                }
+
+            })
+        }
+        )
+
+    })
+</script>
+
+</html>
